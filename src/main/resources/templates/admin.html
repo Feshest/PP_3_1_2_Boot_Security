@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+</head>
+<body>
+<h2>All Users</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Operations</th>
+        </tr>
+        <tr th:each="user: ${users}">
+            <form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.getId()})}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td>
+                    <a th:href="@{/admin/{id}/edit(id=${user.getId()})}">Edit</a>
+                </td>
+                <td>
+                    <input type="submit" value="Delete">
+                </td>
+            </form>
+        </tr>
+    </table>
+<br>
+<hr>
+<input type="button" value="Add new" onclick="window.location.href = '/admin/new'">
+
+<hr>
+<form name="logoutForm" th:action="@{/logout}" method="GET">
+    <input type="submit" value="Sign Out"/>
+</form>
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</body>
+</html>

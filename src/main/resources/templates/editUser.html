@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+<body>
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<form th:method="patch" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
+
+    <label for="username">Username</label>
+    <input type="text" th:field="*{username}" id="username">
+    <br>
+
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password">
+    <br>
+
+    <label for="email">Email</label>
+    <input type="text" th:field="*{email}" id="email">
+    <br>
+
+    <p>Edit Role</p>
+
+    <label for="ROLE_ADMIN">Admin</label>
+    <input type="checkbox" name="userRoles" id="ROLE_ADMIN" value="ADMIN"> <br>
+
+    <br>
+    <select multiple name="nameRole" id="nameRole">
+        <option>ROLE_USER</option>
+        <option>ROLE_ADMIN</option>
+    </select>
+    <input type="submit" value="Update user"/>
+</form>
+<br>
+<a th:href="@{/admin}">Go back</a>
+<br>
+<a href="/logout">Logout</a>
+</body>
+</html>
