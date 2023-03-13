@@ -50,7 +50,7 @@ public class UsersController {
 
     @GetMapping("/user")
     public String getUserPage(Model model, Principal principal) {
-        Long id = userService.getUserByUsername(principal.getName()).getId();
+        Long id = userService.getUserByUserName(principal.getName()).getId();
         model.addAttribute("user", userService.getUserById(id));
         return "/user";
     }

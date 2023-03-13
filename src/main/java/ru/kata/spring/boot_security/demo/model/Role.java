@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "role")
-public class Role implements GrantedAuthority, Serializable {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,14 @@ public class Role implements GrantedAuthority, Serializable {
 
     @Column(name = "role_name")
     private String name;
+
+    public Set<User> getSetUsers() {
+        return setUsers;
+    }
+
+    public void setSetUsers(Set<User> setUsers) {
+        this.setUsers = setUsers;
+    }
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> setUsers;
@@ -46,18 +54,10 @@ public class Role implements GrantedAuthority, Serializable {
         this.name = name;
     }
 
-    public Set<User> getSetUsers() {
-        return setUsers;
-    }
-
-    public void setSetUsers(Set<User> setUsers) {
-        this.setUsers = setUsers;
-    }
-
 
     @Override
     public String getAuthority() {
-        return name;
+        return "ROLE_" + name;
     }
 
     @Override
@@ -65,7 +65,6 @@ public class Role implements GrantedAuthority, Serializable {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", setUsers=" + setUsers +
                 '}';
     }
 

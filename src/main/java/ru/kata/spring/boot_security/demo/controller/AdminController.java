@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class AdminController {
 
     private final RoleService roleService;
     private final UserService userService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public AdminController(UserService userService, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
@@ -34,7 +35,7 @@ public class AdminController {
 
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        userService.removeById(id);
+        userService.delete(id);
         return "redirect:/admin";
     }
 
@@ -51,29 +52,21 @@ public class AdminController {
         Role role = new Role(nameRole);
         roleService.saveRole(role);
         user.setRoles(Set.of(role));
-        userService.updateUser(user);
+        userService.update(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute(new User());
+    public String newUser(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("roles", roleService.getRoles());
         return "/newUser";
     }
 
     @PostMapping()
-    public String createUser(@ModelAttribute("user") User user,
-                             @RequestParam(required = false) String userRoles) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getRoleByName("ROLE_USER"));
-        if (userRoles != null && userRoles.equals(
-                roleService.getRoleByName("ROLE_ADMIN").getName())) {
-            roles.add(roleService.getRoleByName("ROLE_ADMIN"));
-        }
-        user.setRoles(roles);
+    public String createUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
-
-        return "redirect:/admin";
+        return  "redirect:/admin";
     }
+
 
 }
